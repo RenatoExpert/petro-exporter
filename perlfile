@@ -1,0 +1,57 @@
+#!/bin/perl
+
+use warnings;
+use strict;
+
+print("Step 1: Certificado de arqueacao \t (Pegando da aba 1)\n");
+my $empresa;
+my $datacert; 
+#	Nome da certificadora
+while(<>){
+	if ($_ =~ s/Empresa:,//) {
+		$empresa = $_;
+		last;
+	}
+}
+#	Data do certificado
+while(<>){
+	if ($_ =~ s/Certificado:,//) {
+		$datacert = $_;
+		last;
+	}
+}
+$empresa =~ s/\n//;		# Cleaning, since its getting \n between terms
+print ("$empresa $datacert");
+
+print("Step 2: Altura util \t (Pegando da aba 2)\n");
+my $alturautil;
+my $contando_aneis;
+my $ultima_altura;
+my $altura_atual;
+my $segunda_aba;
+my $aneis_counter = 0;
+while(<>){
+	# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA SEGUNDA ABA!!
+	if ($_ =~ /Altura/) {	
+		if ($segunda_aba) {
+			$contando_aneis = 1;
+		}
+		$segunda_aba = 1;
+	} elsif ($contando_aneis) {
+		$altura_atual = $_;
+		# Sabemos que a sessão acaba quando aparece qualquer linha NAO começada com um numero
+		if ($altura_atual =~ m/^[0-9]/) {			
+			$aneis_counter++;
+			$ultima_altura = $altura_atual;
+		} else {
+			my @firstfield = split /,/, $ultima_altura;
+			$ultima_altura = $firstfield[0];
+			last;
+		}
+	}
+}
+print ("$ultima_altura\n"); # ... da aba 2
+
+print("Step 3: Numero de aneis \t (Pegando da aba 2)\n");
+print ("$aneis_counter\n"); # ... da aba 2
+

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#	Tanques
+FILES="tqs/*xls"
+echo $FILES
+for f in $FILES
+do
+	#	Convert to txt
+	tf="$f.txt"
+	echo "Processing $f file into $tf..."
+	ssconvert $f $tf
+	#	Get info
+	./perlfile $tf
+	echo ---------------
+done
+
+rm tqs/*.txt
+
+
