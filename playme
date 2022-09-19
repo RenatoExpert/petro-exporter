@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #	Tanques
-FILES="tqs/*xls"
+FILES="tqs/IBAMETRO/*xls"
 echo $FILES
 for f in $FILES
 do
@@ -10,7 +10,7 @@ do
 	echo "Processing $f file into $tf..."
 	ssconvert $f $tf
 	#	Get info
-	./perlfile $tf
+	./bot_ibametro $tf
 	echo ---------------
 done
 
