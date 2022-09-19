@@ -27,7 +27,6 @@ print("Step 2: Altura util \t (Pegando da aba 2)\n");
 my $alturautil;
 my $contando_aneis;
 my $ultima_altura;
-my $altura_atual;
 my $segunda_aba;
 my $aneis_counter = 0;
 while(<>){
@@ -38,11 +37,10 @@ while(<>){
 		}
 		$segunda_aba = 1;
 	} elsif ($contando_aneis) {
-		$altura_atual = $_;
 		# Sabemos que a sessão acaba quando aparece qualquer linha NAO começada com um numero
-		if ($altura_atual =~ m/^[0-9]/) {			
+		if ($_ =~ m/^[0-9]/) {			
 			$aneis_counter++;
-			$ultima_altura = $altura_atual;
+			$ultima_altura = $_;
 		} else {
 			my @firstfield = split /,/, $ultima_altura;
 			$ultima_altura = $firstfield[0];
