@@ -1,0 +1,54 @@
+#!/bin/perl
+
+use warnings;
+use strict;
+
+print("Step 1: Certificado de arqueacao \t (Pegando da aba 1)\n");
+my $empresa;
+my $datacert; 
+#	Nome da certificadora
+while(<>){
+	if ($_ =~ s/Empresa:,//) {
+		$empresa = $_;
+		last;
+	}
+}
+#	Data do certificado
+while(<>){
+	if ($_ =~ s/Certificado:,//) {
+		$datacert = $_;
+		last;
+	}
+}
+$empresa =~ s/\n//;		# Cleaning, since its getting \n between terms
+print ("$empresa $datacert");
+
+print("Step 2: Altura util \t (Pegando da aba 1)\n");
+my $alturautil;
+my $contando_aneis;
+my $ultima_altura;
+while(<>){
+	# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA PRIMEIRA ABA!!
+	if ($_ =~ /Altura/) {	
+		$contando_aneis = 1;
+	} elsif ($contando_aneis) {
+		# Sabemos que a sessão acaba quando aparece qualquer linha NAO começada com um numero
+		if ($_ =~ m/^[0-9]/) {			
+			$ultima_altura = $_;
+		} else {
+			my @firstfield = split /,/, $ultima_altura;
+			$ultima_altura = $firstfield[0];
+			last;
+		}
+	}
+}
+print ("$ultima_altura\n"); # ... da aba 1
+
+print("Step 3: Numero de aneis \t (Pegando da aba 2)\n");
+my $is_aba2;
+while(<>) {
+	if ($_ =~ /Faixas de Arqueação/) {
+		print $_;
+	}
+}
+
