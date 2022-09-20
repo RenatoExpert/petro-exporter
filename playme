@@ -1,6 +1,10 @@
 #!/bin/bash
+# author: renatoexpert renatorraraujo@gmail.com
 
 #	Tanques
+
+#	Ibametro
+echo "Working on Ibametro certificates"
 FILES="tqs/IBAMETRO/*xls"
 echo $FILES
 for f in $FILES
@@ -14,6 +18,20 @@ do
 	echo ---------------
 done
 
-rm tqs/*.txt
+#	Inmetro
+echo "Working on Inmetro certificates"
+FILES="tqs/INMETRO/*xls"
+echo $FILES
+for f in $FILES
+do
+	tf="$f.txt"
+	echo "Processing $f file into $tf..."
+	ssconvert $f $tf
+	#	Get info
+	./bot_inmetro $tf
+	echo ---------------
+done
+
+rm tqs/*/*.txt
 
 
