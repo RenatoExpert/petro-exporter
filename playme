@@ -2,6 +2,8 @@
 # author: renatoexpert renatorraraujo@gmail.com
 
 #	Tanques
+echo "Cleaning inserts file"
+echo "USE MEDLOGIXCRM" > inserts.sql
 
 #	Ibametro
 echo "Working on Ibametro certificates"
