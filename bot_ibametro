@@ -53,4 +53,4 @@ while(<>){
 #print("Step 3: Numero de aneis \t (Pegando da aba 2)\n");
 #print ("$aneis_counter\n"); # ... da aba 2
 
-print("INSERT INTO tanques (certarqueacao, datacertificado, alturautil, numeroaneis) VALUES ($empresa, $datacert, $alturautil, $aneis_counter);\n");
+print("INSERT INTO tanques ($empresa, $datacert, $alturautil, $aneis_counter) VALUES (certarqueacao, datacertificado, alturautil, numeroaneis);\n");
