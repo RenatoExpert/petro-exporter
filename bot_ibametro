@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-print("Step 1: Certificado de arqueacao \t (Pegando da aba 1)\n");
+#print("Step 1: Certificado de arqueacao \t (Pegando da aba 1)\n");
 my $empresa;
 my $datacert; 
 #	Nome da certificadora
@@ -22,9 +22,9 @@ while(<>){
 	}
 }
 $empresa =~ s/\n//;		# Cleaning, since its getting \n between terms
-print ("$empresa $datacert");
+#print ("$empresa $datacert");
 
-print("Step 2: Altura util \t (Pegando da aba 2)\n");
+#print("Step 2: Altura util \t (Pegando da aba 2)\n");
 my $alturautil;
 my $contando_aneis;
 my $segunda_aba;
@@ -48,9 +48,9 @@ while(<>){
 		}
 	}
 }
-print ("$alturautil\n"); # ... da aba 2
+#print ("$alturautil\n"); # ... da aba 2
 
-print("Step 3: Numero de aneis \t (Pegando da aba 2)\n");
-print ("$aneis_counter\n"); # ... da aba 2
+#print("Step 3: Numero de aneis \t (Pegando da aba 2)\n");
+#print ("$aneis_counter\n"); # ... da aba 2
 
 print("INSERT INTO tanques (certarqueacao, datacertificado, alturautil, numeroaneis) VALUES ($empresa, $datacert, $alturautil, $aneis_counter);\n");
