@@ -8,7 +8,7 @@ my $empresa;
 my $datacert; 
 #	Nome da certificadora
 while(<>){
-	if ($_ = m/Empresa:,/) {
+	if ($_ =~ m/Empresa:,/) {
 		$empresa = $_;
 		$empresa =~ s/Empresa:,//;
 		$empresa =~ s/\n//;
@@ -17,7 +17,7 @@ while(<>){
 }
 #	Data do certificado
 while(<>){
-	if ($_ = m/Certificado:,/) {
+	if ($_ =~ m/Certificado:,/) {
 		$datacert = $_ ;
 		$datacert =~ s/Certificado:,//;
 		$datacert =~ s/\n//;
@@ -34,7 +34,7 @@ my $japassouum	= 0;
 while(<>){
 	# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA SEGUNDA ABA!!
 	if ($_) {
-		if ($_ = m/Faixas de Arqueação/) {	
+		if ($_ =~ m/Faixas de Arqueação/) {	
 			$segunda_aba = 1;
 		} elsif ($segunda_aba) {
 			if ($_ =~ m/Faixa de/) {			
@@ -57,10 +57,10 @@ while(<>){
 # print("Step 2: Altura util \t (Pegando da aba 1)\n");
 my $vendo_altura;
 my $ultima_altura;
-	print("aosdifj");
 while(<>){
+	print("aosdifj");
 	# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA PRIMEIRA ABA!!
-	if ($_ =~ /Altura/) {	
+	if ($_ =~ m/Altura/) {	
 		$vendo_altura = 1;
 	} elsif ($vendo_altura) {
 		# Sabemos que a sessão acaba quando aparece qualquer linha NAO começada com um numero
