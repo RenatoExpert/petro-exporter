@@ -25,7 +25,6 @@ $empresa =~ s/\n//;		# Cleaning, since its getting \n between terms
 #print ("$empresa $datacert");
 
 #print("Step 2: Altura util \t (Pegando da aba 2)\n");
-my $alturautil;
 my $segunda_aba;
 my $aneis_counter = 0;
 while(<>){
@@ -35,10 +34,6 @@ while(<>){
 	} elsif ($segunda_aba) {
 		if ($_ =~ m/Faixa de/) {			
 			$aneis_counter++;
-			$alturautil = $_;
-		} else {
-			my @firstfield = $alturautil;
-			$alturautil = $firstfield[0];
 		}
 	}
 }
