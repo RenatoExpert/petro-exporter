@@ -8,8 +8,10 @@ my $empresa;
 my $datacert; 
 #	Nome da certificadora
 while(<>){
-	if ($_ =~ s/Empresa:,//) {
+	if ($_ = m/Empresa:,/) {
 		$empresa = $_;
+		$empresa =~ s/Empresa:,//;
+		$empresa =~ s/\n//;
 		last;
 	}
 }
@@ -22,7 +24,6 @@ while(<>){
 		last;
 	}
 }
-$empresa =~ s/\n//;		# Cleaning, since its getting \n between terms
 #print ("$empresa $datacert");
 
 #print("Step 2: Altura util \t (Pegando da aba 2)\n");
@@ -33,7 +34,7 @@ my $japassouum	= 0;
 while(<>){
 	# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA SEGUNDA ABA!!
 	if ($_) {
-		if ($_ =~ m/Faixas de Arqueação/) {	
+		if ($_ = m/Faixas de Arqueação/) {	
 			$segunda_aba = 1;
 		} elsif ($segunda_aba) {
 			if ($_ =~ m/Faixa de/) {			
@@ -56,8 +57,8 @@ while(<>){
 # print("Step 2: Altura util \t (Pegando da aba 1)\n");
 my $vendo_altura;
 my $ultima_altura;
-while(<>){
 	print("aosdifj");
+while(<>){
 	# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA PRIMEIRA ABA!!
 	if ($_ =~ /Altura/) {	
 		$vendo_altura = 1;
