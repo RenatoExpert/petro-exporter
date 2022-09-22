@@ -3,7 +3,7 @@
 
 #	Tanques
 echo "Cleaning id file"
-echo "" > idcount
+echo "53" > idcount
 echo "Cleaning inserts file"
 echo "USE MEDLOGIXCRM" > inserts.sql
 
