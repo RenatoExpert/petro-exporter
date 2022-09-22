@@ -46,9 +46,12 @@ print ("$ultima_altura\n"); # ... da aba 1
 
 print("Step 3: Numero de aneis \t (Pegando da aba 2)\n");
 my $is_aba2;
+my $aneis_counter=0;
 while(<>) {
 	if ($_ =~ /Faixas de Arqueação/) {
-		print $_;
+		$is_aba2=1;
+	} elsif ($is_aba2 && $_ =~ m/^[0-9]/) {
+		$aneis_counter++;
 	}
 }
-
+print("$aneis_counter\n");
