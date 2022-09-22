@@ -26,7 +26,6 @@ print ("$empresa $datacert");
 print("Step 2: Altura util \t (Pegando da aba 2)\n");
 my $alturautil;
 my $contando_aneis;
-my $ultima_altura;
 my $segunda_aba;
 my $aneis_counter = 0;
 while(<>){
@@ -40,16 +39,17 @@ while(<>){
 		# Sabemos que a sessão acaba quando aparece qualquer linha NAO começada com um numero
 		if ($_ =~ m/^[0-9]/) {			
 			$aneis_counter++;
-			$ultima_altura = $_;
+			$alturautil = $_;
 		} else {
-			my @firstfield = split /,/, $ultima_altura;
-			$ultima_altura = $firstfield[0];
+			my @firstfield = split /,/, $alturautil;
+			$alturautil = $firstfield[0];
 			last;
 		}
 	}
 }
-print ("$ultima_altura\n"); # ... da aba 2
+print ("$alturautil\n"); # ... da aba 2
 
 print("Step 3: Numero de aneis \t (Pegando da aba 2)\n");
 print ("$aneis_counter\n"); # ... da aba 2
 
+print("INSERT INTO tanques (certarqueacao, datacertificado, alturautil, numeroaneis) VALUES ($empresa, $datacert, $alturautil, $aneis_counter);";
