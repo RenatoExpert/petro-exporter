@@ -14,7 +14,7 @@ do
 	echo "Processing $f file into $tf..."
 	ssconvert $f $tf
 	#	Get info
-	./bot_ibametro $tf
+	./bot_ibametro $tf 1>> inserts.sql
 	echo ---------------
 done
 
