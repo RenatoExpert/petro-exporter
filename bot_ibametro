@@ -3,10 +3,9 @@
 use warnings;
 use strict;
 
-#print("Step 1: Certificado de arqueacao \t (Pegando da aba 1)\n");
-my $empresa;
-my $datacert; 
+print("Step 1: Certificado de arqueacao \t (Pegando da aba 1)\n");
 #	Nome da certificadora
+my $empresa;
 while(<>){
 	if ($_ =~ m/Empresa:,/) {
 		$empresa = $_;
@@ -16,6 +15,7 @@ while(<>){
 	}
 }
 #	Data do certificado
+my $datacert; 
 while(<>){
 	if ($_ =~ m/Certificado:,/) {
 		$datacert = $_ ;
@@ -24,9 +24,34 @@ while(<>){
 		last;
 	}
 }
-#print ("$empresa $datacert");
+print ("$empresa $datacert");
 
-#print("Step 2: Altura util \t (Pegando da aba 2)\n");
+# print("Step 2: Altura util \t (Pegando da aba 1)\n");
+my $vendo_altura;
+my $ultima_altura;
+while(<>){
+	# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA PRIMEIRA ABA!!
+	if ($_ =~ m/Altura/) {	
+		$vendo_altura = 1;
+	} elsif ($vendo_altura) {
+		# Sabemos que a sessão acaba quando aparece qualquer linha NAO começada com um numero
+		if ($_ =~ m/^[0-9]/) {			
+			$ultima_altura = $_;
+		} else {
+			my @firstfield = split /,/, $ultima_altura;
+			$ultima_altura = $firstfield[0];
+			last;
+		}
+	} else {
+		last;
+	}
+}
+my $alturautil = $ultima_altura;
+
+#print("Step 3: Numero de aneis \t (Pegando da aba 2)\n");
+#print ("$aneis_counter\n"); # ... da aba 2
+
+print("Step 2: Contando os aneis \t (Pegando da aba 2)\n");
 my $segunda_aba = 0;
 my $aneis_counter = 0;
 my $scheisse	= 0;
@@ -53,29 +78,6 @@ while(<>){
 		last;
 	}
 }
-
-# print("Step 2: Altura util \t (Pegando da aba 1)\n");
-my $vendo_altura;
-my $ultima_altura;
-while(<>){
-	print("aosdifj");
-	# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA PRIMEIRA ABA!!
-	if ($_ =~ m/Altura/) {	
-		$vendo_altura = 1;
-	} elsif ($vendo_altura) {
-		# Sabemos que a sessão acaba quando aparece qualquer linha NAO começada com um numero
-		if ($_ =~ m/^[0-9]/) {			
-			$ultima_altura = $_;
-		} else {
-			my @firstfield = split /,/, $ultima_altura;
-			$ultima_altura = $firstfield[0];
-			last;
-		}
-	}
-}
-my $alturautil = $ultima_altura;
-#print("Step 3: Numero de aneis \t (Pegando da aba 2)\n");
-#print ("$aneis_counter\n"); # ... da aba 2
 
 my $certimestamp;
 my @listtemp = split /\//, $datacert;
