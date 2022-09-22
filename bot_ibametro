@@ -15,8 +15,9 @@ while(<>){
 }
 #	Data do certificado
 while(<>){
-	if ($_ =~ s/Certificado:,//) {
-		$datacert = $_;
+	if ($_ = m/Certificado:,/) {
+		$datacert = $_ ;
+		$datacert =~ s/Certificado:,//;
 		$datacert =~ s/\n//;
 		last;
 	}
@@ -25,20 +26,53 @@ $empresa =~ s/\n//;		# Cleaning, since its getting \n between terms
 #print ("$empresa $datacert");
 
 #print("Step 2: Altura util \t (Pegando da aba 2)\n");
-my $segunda_aba;
+my $segunda_aba = 0;
 my $aneis_counter = 0;
+my $scheisse	= 0;
+my $japassouum	= 0;
 while(<>){
 	# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA SEGUNDA ABA!!
-	if ($_ =~ m/Faixas de Arqueação/) {	
-		$segunda_aba = 1;
-	} elsif ($segunda_aba) {
-		if ($_ =~ m/Faixa de/) {			
-			$aneis_counter++;
+	if ($_) {
+		if ($_ =~ m/Faixas de Arqueação/) {	
+			$segunda_aba = 1;
+		} elsif ($segunda_aba) {
+			if ($_ =~ m/Faixa de/) {			
+				$aneis_counter++;
+				$scheisse = 0;
+				$japassouum++;
+			} elsif ($_ =~ m/^[0-9]/) {
+				$scheisse = 0;
+			} elsif ($scheisse && $japassouum) {
+				last;
+			} else {
+				$scheisse++;
+			}		
+		}
+	} else {
+		last;
+	}
+}
+
+# print("Step 2: Altura util \t (Pegando da aba 1)\n");
+my $vendo_altura;
+my $ultima_altura;
+while(<>){
+	print("aosdifj");
+	# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA PRIMEIRA ABA!!
+	if ($_ =~ /Altura/) {	
+		$vendo_altura = 1;
+	} elsif ($vendo_altura) {
+		# Sabemos que a sessão acaba quando aparece qualquer linha NAO começada com um numero
+		if ($_ =~ m/^[0-9]/) {			
+			$ultima_altura = $_;
+		} else {
+			my @firstfield = split /,/, $ultima_altura;
+			$ultima_altura = $firstfield[0];
+			last;
 		}
 	}
 }
-#print ("$alturautil\n"); # ... da aba 2
-
+my $alturautil = $ultima_altura;
 #print("Step 3: Numero de aneis \t (Pegando da aba 2)\n");
 #print ("$aneis_counter\n"); # ... da aba 2
 
