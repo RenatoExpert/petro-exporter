@@ -25,7 +25,7 @@ $empresa =~ s/\n//;		# Cleaning, since its getting \n between terms
 #print ("$empresa $datacert");
 
 #print("Step 2: Altura util \t (Pegando da aba 2)\n");
-my $alturautil = 'nada';
+my $alturautil;
 my $segunda_aba;
 my $aneis_counter = 0;
 while(<>){
