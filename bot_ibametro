@@ -28,7 +28,7 @@ print ("$empresa $datacert");
 
 print("Step 2: Altura util \t (Pegando da aba 1)\n");
 my $vendo_altura;
-my $ultima_altura;
+my $altura_util;
 while(<>){
 	# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA PRIMEIRA ABA!!
 	if ($_ =~ m/Altura/) {	
@@ -36,17 +36,16 @@ while(<>){
 	} elsif ($vendo_altura) {
 		# Sabemos que a sessão acaba quando aparece qualquer linha NAO começada com um numero
 		if ($_ =~ m/^[0-9]/) {			
-			$ultima_altura = $_;
+			$altura_util = $_;
 		} else {
-			my @firstfield = split /,/, $ultima_altura;
-			$ultima_altura = $firstfield[0];
+			my @firstfield = split /,/, $altura_util;
+			$altura_util = $firstfield[0];
 			last;
 		}
 	} else {
 		last;
 	}
 }
-my $alturautil = $ultima_altura;
 
 print("Step 3: Contando os aneis \t (Pegando da aba 2)\n");
 my $segunda_aba = 0;
@@ -75,7 +74,8 @@ while(<>){
 		last;
 	}
 }
-print("$aneis_counter");
+
+print("${aneis_counter}");
 
 my $certimestamp;
 my @listtemp = split /\//, $datacert;
@@ -106,4 +106,4 @@ open (IW, '>', $anelidfile);
 print IW "$previousid";
 close(IW);
 
-print("INSERT INTO arqueacoes (certarqueacao, datacertificado, alturautil, numeroaneis) VALUES ('${empresa}${datacert}', '${certimestamp}', '${alturautil}', '${aneis_counter}');\n");
+print("INSERT INTO arqueacoes (certarqueacao, datacertificado, alturautil, numeroaneis) VALUES ('${empresa}${datacert}', '${certimestamp}', '${altura_util}', '${aneis_counter}');\n");
