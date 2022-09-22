@@ -17,6 +17,7 @@ while(<>){
 while(<>){
 	if ($_ =~ s/Certificado:,//) {
 		$datacert = $_;
+		$datacert =~ s/\n//;
 		last;
 	}
 }
@@ -52,4 +53,4 @@ print ("$alturautil\n"); # ... da aba 2
 print("Step 3: Numero de aneis \t (Pegando da aba 2)\n");
 print ("$aneis_counter\n"); # ... da aba 2
 
-print("INSERT INTO tanques (certarqueacao, datacertificado, alturautil, numeroaneis) VALUES ($empresa, $datacert, $alturautil, $aneis_counter);";
+print("INSERT INTO tanques (certarqueacao, datacertificado, alturautil, numeroaneis) VALUES ($empresa, $datacert, $alturautil, $aneis_counter);\n");
