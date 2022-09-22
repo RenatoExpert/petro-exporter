@@ -53,4 +53,13 @@ while(<>){
 #print("Step 3: Numero de aneis \t (Pegando da aba 2)\n");
 #print ("$aneis_counter\n"); # ... da aba 2
 
-print("INSERT INTO arqueacoes (certarqueacao, datacertificado, alturautil, numeroaneis) VALUES ('$empresa', '$datacert', '$alturautil', '$aneis_counter');\n");
+my $certimestamp;
+my @listtemp = split /\//, $datacert;
+$certimestamp = $listtemp[1];
+if ($certimestamp =~ m/[0-9]{4}/) {
+	#print("$certimestamp 4 vezes\n");
+} else {
+	$certimestamp = "20${certimestamp}";
+}
+
+print("INSERT INTO arqueacoes (certarqueacao, datacertificado, alturautil, numeroaneis) VALUES ('$empresa', '$certimestamp', '$alturautil', '$aneis_counter');\n");
