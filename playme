@@ -2,6 +2,8 @@
 # author: renatoexpert renatorraraujo@gmail.com
 
 #	Tanques
+echo "Cleaning id file"
+echo "" > idcount
 echo "Cleaning inserts file"
 echo "USE MEDLOGIXCRM" > inserts.sql
 
