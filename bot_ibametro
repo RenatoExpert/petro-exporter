@@ -1,5 +1,4 @@
 #!/bin/perl
-
 use warnings;
 use strict;
 
@@ -98,34 +97,15 @@ while(<>){
 #	Defining anelid's
 my $anelcountdown = $numeroaneis;
 my $executionturn = 1;
-my $anelid1;
-my $anelid2;
-my $anelid3;
-my $anelid4;
-my $anelid5;
-my $anelid6;
-my $anelid7;
-my $anelid8;
-my $anelid9;
+my $anelid_columns;
+my $anelid_values;
 while ($anelcountdown) {
-	if ($executionturn == 1) {
-		$anelid1 = ++$previousid;
-	} elsif ($executionturn == 2) {
-		$anelid2 = ++$previousid;
-	} elsif ($executionturn == 3) {
-		$anelid3 = ++$previousid;
-	} elsif ($executionturn == 4) {
-		$anelid4 = ++$previousid;
-	} elsif ($executionturn == 5) {
-		$anelid5 = ++$previousid;
-	} elsif ($executionturn == 6) {
-		$anelid6 = ++$previousid;
-	} elsif ($executionturn == 7) {
-		$anelid7 = ++$previousid;
-	} elsif ($executionturn == 8) {
-		$anelid8 = ++$previousid;
-	} elsif ($executionturn == 9) {
-		$anelid9 = ++$previousid;
+	if ($anelcountdown) {
+		my $let_counter = 1+$numeroaneis-$anelcountdown;
+		$anelid_columns .= "anelid${let_counter}";
+		$anelid_values .= $let_counter;
+	} else {
+		last;
 	}
 	$anelcountdown--;
 }
@@ -136,4 +116,4 @@ print IW "$previousid";
 close(IW);
 
 #	Generating SQL syntax
-print("INSERT INTO arqueacoes (certarqueacao, datacertificado, alturautil, numeroaneis, anelid1) VALUES ('${empresa}${datacert}', '${certimestamp}', '${altura_util}', '${numeroaneis}', '${anelid1}');\n");
+print("INSERT INTO arqueacoes (certarqueacao, datacertificado, alturautil, numeroaneis, ${anelid_columns}) VALUES ('${empresa}${datacert}', '${certimestamp}', '${altura_util}', '${numeroaneis}', '${anelid_values}');\n");
