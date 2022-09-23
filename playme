@@ -9,7 +9,7 @@ echo "USE MEDLOGIXCRM" > inserts.sql
 
 #	Ibametro
 echo "Working on Ibametro certificates"
-FILES="tqs/IBAMETRO/*xls"
+FILES="IBAMETRO/*xls"
 echo $FILES
 for f in $FILES
 do
@@ -24,7 +24,7 @@ done
 
 #	Inmetro
 echo "Working on Inmetro certificates"
-FILES="tqs/INMETRO/*xls"
+FILES="INMETRO/*xls"
 echo $FILES
 for f in $FILES
 do
@@ -32,7 +32,7 @@ do
 	echo "Processing $f file into $tf..."
 	ssconvert $f $tf
 	#	Get info
-	./bot_inmetro $tf
+	./bot_ibametro $tf
 	echo ---------------
 done
 

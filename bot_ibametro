@@ -3,7 +3,7 @@ use warnings;
 use strict;
 
 #	Pegando o ultimo anelid
-my $anelidfile = './idcount';
+my $anelidfile = "./idcount";
 my $previousid = 1;
 open (IC, '<', $anelidfile) or die $!;
 while (<IC>) {
@@ -48,10 +48,12 @@ while(<>){
 			$datacert =~ s/\n//;
 			$run_datacert = 0;
 			#	Tratando o timestamp de ano
-			my @listtemp = split /\//, $datacert;
-			$certimestamp = $listtemp[1];
-			if ($certimestamp !~ m/[0-9]{4}/) {
-				$certimestamp = "20${certimestamp}";
+			if ($datacert =~ m/\//) {
+				my @listtemp = split /\//, $datacert;
+				$certimestamp = $listtemp[1];
+				if ($certimestamp !~ m/[0-9]{4}/) {
+					$certimestamp = "20${certimestamp}";
+				}
 			}
 		}
 	}
