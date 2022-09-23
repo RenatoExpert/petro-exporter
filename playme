@@ -36,5 +36,5 @@ do
 	echo ---------------
 done
 
-rm tqs/*/*.txt
+rm */*.txt
 
