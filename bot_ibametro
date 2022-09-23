@@ -53,7 +53,6 @@ while(<>){
 	}
 	if ($run_contando_aneis) {
 		# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA SEGUNDA ABA!!
-		print $_;
 		if ($_ =~ m/Faixas de Arqueação/) {	
 			$segunda_aba = 1;
 		} elsif ($comecou) {
