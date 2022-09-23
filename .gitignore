@@ -1,6 +1,10 @@
 #	No documents
 *.xls
+tqs/
 *.txt
 
 #	No SQL scripts, which are our results
 *.sql
+
+#	No variable files
+idcount
