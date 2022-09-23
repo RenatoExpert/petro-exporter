@@ -47,14 +47,14 @@ while(<>){
 			} else {
 				my @firstfield = split /,/, $altura_util;
 				$altura_util = $firstfield[0];
-				last;
+				$run_altura_util = 0;
 			}
 		}
 	}
 	if ($run_contando_aneis) {
 		# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA SEGUNDA ABA!!
+		print $_;
 		if ($_ =~ m/Faixas de Arqueação/) {	
-			print $_;
 			$segunda_aba = 1;
 		} elsif ($comecou) {
 			if ($_ =~ m/Faixa de/) {			
