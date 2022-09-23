@@ -48,8 +48,7 @@ while(<>){
 print("Step 3: Contando os aneis \t (Pegando da aba 2)\n");
 my $segunda_aba		= 0;
 my $aneis_counter	= 0;
-my $scheisse		= 0;
-my $japassouum		= 0;
+my $missing		= 0;
 while(<>){
 	# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA SEGUNDA ABA!!
 	if ($_ =~ m/Faixas de Arqueação/) {	
@@ -57,10 +56,10 @@ while(<>){
 	} elsif ($segunda_aba) {
 		if ($_ =~ m/Faixa de/) {			
 			$aneis_counter++;
-		} elsif ($scheisse) {
+		} elsif ($missing) {
 			last;
 		} else {
-			$scheisse++;
+			$missing++;
 		}
 	}
 }
