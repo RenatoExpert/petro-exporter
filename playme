@@ -8,8 +8,8 @@ echo "Cleaning inserts file"
 echo "USE MEDLOGIXCRM" > inserts.sql
 
 #	Ibametro
-echo "Working on Ibametro certificates"
-FILES="IBAMETRO/*xls"
+echo "Working on the following certificates"
+FILES="**xls"
 echo $FILES
 for f in $FILES
 do
@@ -18,23 +18,9 @@ do
 	echo "Processing $f file into $tf..."
 	ssconvert $f $tf
 	#	Get info
-	./bot_ibametro $tf #1>> inserts.sql
+	./analizer $tf #1>> inserts.sql
 	echo ---------------
 done
 
-#	Inmetro
-echo "Working on Inmetro certificates"
-FILES="INMETRO/*xls"
-echo $FILES
-for f in $FILES
-do
-	tf="$f.txt"
-	echo "Processing $f file into $tf..."
-	ssconvert $f $tf
-	#	Get info
-	./bot_ibametro $tf
-	echo ---------------
-done
-
-rm */*.txt
+rm **.txt
 rm idcount
