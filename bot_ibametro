@@ -21,7 +21,7 @@ my $run_empresa		= 1;
 #	Data do certificado
 my $datacert; 
 my $run_datacert	= 1;
-my $certimestamp;
+my $datacertificado_value;
 #	Altura util
 my $vendo_altura;
 my $altura_util;
@@ -50,10 +50,16 @@ while(<>){
 			#	Tratando o timestamp de ano
 			if ($datacert =~ m/\//) {
 				my @listtemp = split /\//, $datacert;
-				$certimestamp = $listtemp[1];
-				if ($certimestamp !~ m/[0-9]{4}/) {
-					$certimestamp = "20${certimestamp}";
+				$datacertificado_value = $listtemp[1];
+				my $vintao;
+				if ($datacertificado_value !~ m/[0-9]{4}/) {
+					$vintao = "20";
+				} else {
+					$vintao = "";
 				}
+				$datacertificado_value = ", '${vintao}${datacertificado_value}'";
+			} else {
+				$datacertificado_value = "";
 			}
 		}
 	}
@@ -118,9 +124,17 @@ open (IW, '>', $anelidfile);
 print IW "$previousid";
 close(IW);
 
+#	Data certificado
+my $datacertificado_column;
+if ($datacertificado_value) {
+	$datacertificado_column = ", datacertificado";
+} else {
+	$datacertificado_column = "";
+}
+
 #	Generating SQL syntax
 my $sqlfile	= './inserts.sql';
 open (SQLF, '>>', $sqlfile);
-my $command = "INSERT INTO arqueacoes (certarqueacao, datacertificado, alturautil, numeroaneis${anelid_columns}) VALUES ('${empresa}${datacert}', '${certimestamp}', '${altura_util}', '${numeroaneis}'${anelid_values});\n";
+my $command = "INSERT INTO arqueacoes (certarqueacao${datacertificado_column}, alturautil, numeroaneis${anelid_columns}) VALUES ('${empresa}${datacert}'${datacertificado_value}, '${altura_util}', '${numeroaneis}'${anelid_values});\n";
 print SQLF $command;
 close(SQLF);
