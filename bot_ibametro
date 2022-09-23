@@ -5,14 +5,20 @@ use strict;
 
 #	Nome da certificadora
 my $empresa;
-my $run_empresa = 1;
+my $run_empresa		= 1;
 #	Data do certificado
 my $datacert; 
-my $run_datacert = 1;
+my $run_datacert	= 1;
 #	Altura util
 my $vendo_altura;
 my $altura_util;
-my $run_altura_util = 1;
+my $run_altura_util	= 1;
+#	Contando aneis
+my $segunda_aba		= 0;
+my $aneis_counter	= 0;
+my $missing		= 0;
+my $comecou		= 0;
+my $run_contando_aneis	= 1;
 while(<>){
 	if ($run_empresa) {
 		if ($_ =~ m/Empresa:,/) {
@@ -45,37 +51,30 @@ while(<>){
 			}
 		}
 	}
-}
-print ("${empresa} ${datacert} \n");
-
-print("Step 3: Contando os aneis \t (Pegando da aba 2)\n");
-my $segunda_aba		= 0;
-my $aneis_counter	= 0;
-my $missing		= 0;
-my $comecou		= 0;
-while(<>){
-	# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA SEGUNDA ABA!!
-	if ($_ =~ m/Faixas de Arqueação/) {	
-		$segunda_aba = 1;
-	} elsif ($comecou) {
-		if ($_ =~ m/Faixa de/) {			
-			$aneis_counter++;
-			$missing = 0;
-		} elsif ($_ =~ m/^[0-9]/) {
-			$missing = 0;
-		} elsif ($missing) {
-			last;
-		} else {
-			$missing++;
-		}
-	} elsif ($segunda_aba) {
-		if ($_ =~ m/Faixa de/) {			
-			$aneis_counter++;
-			$comecou++;
+	if ($run_contando_aneis) {
+		# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA SEGUNDA ABA!!
+		if ($_ =~ m/Faixas de Arqueação/) {	
+			print $_;
+			$segunda_aba = 1;
+		} elsif ($comecou) {
+			if ($_ =~ m/Faixa de/) {			
+				$aneis_counter++;
+				$missing = 0;
+			} elsif ($_ =~ m/^[0-9]/) {
+				$missing = 0;
+			} elsif ($missing) {
+				$run_contando_aneis = 0;
+			} else {
+				$missing++;
+			}
+		} elsif ($segunda_aba) {
+			if ($_ =~ m/Faixa de/) {			
+				$aneis_counter++;
+				$comecou++;
+			}
 		}
 	}
 }
-print("${aneis_counter}\n");
 
 my $certimestamp;
 my @listtemp = split /\//, $datacert;
