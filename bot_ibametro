@@ -120,5 +120,5 @@ close(IW);
 my $sqlfile	= './inserts.sql';
 open (SQLF, '>', $sqlfile);
 my $command = "INSERT INTO arqueacoes (certarqueacao, datacertificado, alturautil, numeroaneis${anelid_columns}) VALUES ('${empresa}${datacert}', '${certimestamp}', '${altura_util}', '${numeroaneis}'${anelid_values});\n";
-print $command SQLF;
+print SQLF $command;
 close(SQLF);
