@@ -104,7 +104,6 @@ while(<>){
 				$let_faixa =~ s/"Faixa de //;
 				my @let_range = split / /, $let_faixa;
 				$let_faixa = $let_range[0];
-				$let_faixa =~ s/cm//;
 				push @alturas_iniciais, $let_faixa;
 			}
 		}
