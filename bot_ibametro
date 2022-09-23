@@ -102,8 +102,8 @@ my $anelid_values;
 while ($anelcountdown) {
 	if ($anelcountdown) {
 		my $let_counter = 1+$numeroaneis-$anelcountdown;
-		$anelid_columns .= "anelid${let_counter}";
-		$anelid_values .= $previousid++;
+		$anelid_columns .= ", anelid${let_counter}";
+		$anelid_values .= ", '${previousid++}'";
 	} else {
 		last;
 	}
@@ -116,4 +116,4 @@ print IW "$previousid";
 close(IW);
 
 #	Generating SQL syntax
-print("INSERT INTO arqueacoes (certarqueacao, datacertificado, alturautil, numeroaneis, ${anelid_columns}) VALUES ('${empresa}${datacert}', '${certimestamp}', '${altura_util}', '${numeroaneis}', '${anelid_values}');\n");
+print("INSERT INTO arqueacoes (certarqueacao, datacertificado, alturautil, numeroaneis${anelid_columns}) VALUES ('${empresa}${datacert}', '${certimestamp}', '${altura_util}', '${numeroaneis}'${anelid_values});\n");
