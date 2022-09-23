@@ -37,4 +37,4 @@ do
 done
 
 rm */*.txt
-
+rm idcount
