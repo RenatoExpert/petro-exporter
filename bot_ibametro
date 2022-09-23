@@ -103,7 +103,8 @@ while ($anelcountdown) {
 	if ($anelcountdown) {
 		my $let_counter = 1+$numeroaneis-$anelcountdown;
 		$anelid_columns .= ", anelid${let_counter}";
-		$anelid_values .= ", '${previousid++}'";
+		$previousid++;
+		$anelid_values .= ", '${previousid}'";
 	} else {
 		last;
 	}
