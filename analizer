@@ -34,6 +34,7 @@ my $comecou		= 0;
 my $run_contando_aneis	= 1;
 #	Altura inicial (de cada anel)
 my @alturas_iniciais;
+my @alturas_finais;
 while(<>){
 	if ($run_empresa) {
 		if ($_ =~ m/Empresa:,/) {
@@ -101,10 +102,15 @@ while(<>){
 				$numeroaneis++;
 				$comecou++;
 				my $let_faixa = $_;
-				$let_faixa =~ s/"Faixa de //;
+				$let_faixa =~ s/Faixa de //;
+				$let_faixa =~ s/"//g;
+				$let_faixa =~ s/\n//g;
+				$let_faixa =~ s/,//g;
 				my @let_range = split / /, $let_faixa;
-				$let_faixa = $let_range[0];
-				push @alturas_iniciais, $let_faixa;
+				my $let_inicial = $let_range[0];
+				my $let_final = $let_range[2];
+				push @alturas_iniciais, $let_inicial;
+				push @alturas_finais, $let_final
 			}
 		}
 	}
@@ -130,12 +136,22 @@ while ($anelcountdown) {
 #	Defining altura minima
 my $altura_inicial_columns;
 my $altura_inicial_values;
-my $let_altura_counter = 1;
+my $let_alturai_counter = 1;
 while (@alturas_iniciais) {
-	$altura_inicial_columns .= ", alturainicial${let_altura_counter}";
+	$altura_inicial_columns .= ", alturainicial${let_alturai_counter}";
 	my $let_valor = shift @alturas_iniciais;
 	$altura_inicial_values .= ", '${let_valor}'";
-	$let_altura_counter++;
+	$let_alturai_counter++;
+}
+#	Defining altura maxima
+my $altura_final_columns;
+my $altura_final_values;
+my $let_alturaf_counter = 1;
+while (@alturas_finais) {
+	$altura_final_columns .= ", alturafinal${let_alturaf_counter}";
+	my $let_valor = shift @alturas_finais;
+	$altura_final_values .= ", '${let_valor}'";
+	$let_alturaf_counter++;
 }
 
 #	Saving last anelid
@@ -154,6 +170,6 @@ if ($datacertificado_value) {
 #	Generating SQL syntax
 my $sqlfile	= './inserts.sql';
 open (SQLF, '>>', $sqlfile);
-my $command = "INSERT INTO arqueacoes (certarqueacao${datacertificado_column}, alturautil${altura_inicial_columns}, numeroaneis${anelid_columns}) VALUES ('${empresa}${datacert}'${datacertificado_value}, '${altura_util}'${altura_inicial_values}, '${numeroaneis}'${anelid_values});\n";
+my $command = "INSERT INTO arqueacoes (certarqueacao${datacertificado_column}, alturautil${altura_inicial_columns}${altura_final_columns}, numeroaneis${anelid_columns}) VALUES ('${empresa}${datacert}'${datacertificado_value}, '${altura_util}'${altura_inicial_values}${altura_final_values}, '${numeroaneis}'${anelid_values});\n";
 print SQLF $command or die($!);
 close(SQLF);
