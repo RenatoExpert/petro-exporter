@@ -110,7 +110,6 @@ while(<>){
 		}
 	}
 }
-print @alturas_iniciais;
 
 #	Defining anelid's
 my $anelcountdown = $numeroaneis;
@@ -129,6 +128,17 @@ while ($anelcountdown) {
 	$anelcountdown--;
 }
 
+#	Defining altura minima
+my $altura_inicial_columns;
+my $altura_inicial_values;
+my $let_altura_counter = 1;
+while (@alturas_iniciais) {
+	$altura_inicial_columns .= ", alturainicial${let_altura_counter}";
+	my $let_valor = shift @alturas_iniciais;
+	$altura_inicial_values .= ", '${let_valor}'";
+	$let_altura_counter++;
+}
+
 #	Saving last anelid
 open (IW, '>', $anelidfile);
 print IW "$previousid";
@@ -145,6 +155,6 @@ if ($datacertificado_value) {
 #	Generating SQL syntax
 my $sqlfile	= './inserts.sql';
 open (SQLF, '>>', $sqlfile);
-my $command = "INSERT INTO arqueacoes (certarqueacao${datacertificado_column}, alturautil, numeroaneis${anelid_columns}) VALUES ('${empresa}${datacert}'${datacertificado_value}, '${altura_util}', '${numeroaneis}'${anelid_values});\n";
+my $command = "INSERT INTO arqueacoes (certarqueacao${datacertificado_column}, alturautil${altura_inicial_columns}, numeroaneis${anelid_columns}) VALUES ('${empresa}${datacert}'${datacertificado_value}, '${altura_util}'${altura_inicial_values}, '${numeroaneis}'${anelid_values});\n";
 print SQLF $command or die($!);
 close(SQLF);
