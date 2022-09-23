@@ -9,6 +9,7 @@ my $run_empresa		= 1;
 #	Data do certificado
 my $datacert; 
 my $run_datacert	= 1;
+my $certimestamp;
 #	Altura util
 my $vendo_altura;
 my $altura_util;
@@ -34,6 +35,12 @@ while(<>){
 			$datacert =~ s/Certificado:,//;
 			$datacert =~ s/\n//;
 			$run_datacert = 0;
+			#	Tratando o timestamp de ano
+			my @listtemp = split /\//, $datacert;
+			$certimestamp = $listtemp[1];
+			if ($certimestamp !~ m/[0-9]{4}/) {
+				$certimestamp = "20${certimestamp}";
+			}
 		}
 	}
 	if ($run_altura_util) {
@@ -73,15 +80,6 @@ while(<>){
 			}
 		}
 	}
-}
-
-my $certimestamp;
-my @listtemp = split /\//, $datacert;
-$certimestamp = $listtemp[1];
-if ($certimestamp =~ m/[0-9]{4}/) {
-	#print("$certimestamp 4 vezes\n");
-} else {
-	$certimestamp = "20${certimestamp}";
 }
 
 
