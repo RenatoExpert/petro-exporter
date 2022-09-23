@@ -1,3 +1,6 @@
 #	No documents
 *.xls
 *.txt
+
+#	No SQL scripts, which are our results
+*.sql
