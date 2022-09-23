@@ -3,6 +3,19 @@
 use warnings;
 use strict;
 
+#	Pegando o ultimo anelid
+my $anelidfile = './idcount';
+my $previousid = 1;
+open (IC, '<', $anelidfile) or die $!;
+while (<IC>) {
+	if ($_ =~ m/[0-9]/) {
+		if($_ > $previousid) {
+			$previousid = $_;
+		}
+	}
+}
+close (IC);
+
 #	Nome da certificadora
 my $empresa;
 my $run_empresa		= 1;
@@ -83,19 +96,6 @@ while(<>){
 }
 
 
-#	Atribuindo anelid's
-
-my $anelidfile = './idcount';
-my $previousid = 1;
-open (IC, '<', $anelidfile) or die $!;
-while (<IC>) {
-	if ($_ =~ m/[0-9]/) {
-		if($_ > $previousid) {
-			$previousid = $_;
-		}
-	}
-}
-close (IC);
 
 $previousid++;
 open (IW, '>', $anelidfile);
