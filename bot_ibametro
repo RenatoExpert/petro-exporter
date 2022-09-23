@@ -29,7 +29,7 @@ my $altura_util;
 my $run_altura_util	= 1;
 #	Contando aneis
 my $segunda_aba		= 0;
-my $aneis_counter	= 0;
+my $numeroaneis	= 0;
 my $missing		= 0;
 my $comecou		= 0;
 my $run_contando_aneis	= 1;
@@ -77,7 +77,7 @@ while(<>){
 			$segunda_aba = 1;
 		} elsif ($comecou) {
 			if ($_ =~ m/Faixa de/) {			
-				$aneis_counter++;
+				$numeroaneis++;
 				$missing = 0;
 			} elsif ($_ =~ m/^[0-9]/) {
 				$missing = 0;
@@ -88,18 +88,52 @@ while(<>){
 			}
 		} elsif ($segunda_aba) {
 			if ($_ =~ m/Faixa de/) {			
-				$aneis_counter++;
+				$numeroaneis++;
 				$comecou++;
 			}
 		}
 	}
 }
 
+#	Defining anelid's
+my $anelcountdown = $numeroaneis;
+my $executionturn = 1;
+my $anelid1;
+my $anelid2;
+my $anelid3;
+my $anelid4;
+my $anelid5;
+my $anelid6;
+my $anelid7;
+my $anelid8;
+my $anelid9;
+while ($anelcountdown) {
+	if ($executionturn == 1) {
+		$anelid1 = ++$previousid;
+	} elsif ($executionturn == 2) {
+		$anelid2 = ++$previousid;
+	} elsif ($executionturn == 3) {
+		$anelid3 = ++$previousid;
+	} elsif ($executionturn == 4) {
+		$anelid4 = ++$previousid;
+	} elsif ($executionturn == 5) {
+		$anelid5 = ++$previousid;
+	} elsif ($executionturn == 6) {
+		$anelid6 = ++$previousid;
+	} elsif ($executionturn == 7) {
+		$anelid7 = ++$previousid;
+	} elsif ($executionturn == 8) {
+		$anelid8 = ++$previousid;
+	} elsif ($executionturn == 9) {
+		$anelid9 = ++$previousid;
+	}
+	$anelcountdown--;
+}
 
-
-$previousid++;
+#	Saving last anelid
 open (IW, '>', $anelidfile);
 print IW "$previousid";
 close(IW);
 
-print("INSERT INTO arqueacoes (certarqueacao, datacertificado, alturautil, numeroaneis) VALUES ('${empresa}${datacert}', '${certimestamp}', '${altura_util}', '${aneis_counter}');\n");
+#	Generating SQL syntax
+print("INSERT INTO arqueacoes (certarqueacao, datacertificado, alturautil, numeroaneis, anelid1) VALUES ('${empresa}${datacert}', '${certimestamp}', '${altura_util}', '${numeroaneis}', '${anelid1}');\n");
