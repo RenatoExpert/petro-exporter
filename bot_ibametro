@@ -58,7 +58,7 @@ while(<>){
 		if ($_ =~ m/Faixa de/) {			
 			$aneis_counter++;
 			$missing = 0;
-		} elsif ($_ =~ m/[0-9]/) {
+		} elsif ($_ =~ m/^[0-9]/) {
 			$missing = 0;
 		} elsif ($missing) {
 			last;
@@ -66,10 +66,13 @@ while(<>){
 			$missing++;
 		}
 	} elsif ($segunda_aba) {
-		$comecou++;
+		if ($_ =~ m/Faixa de/) {			
+			$aneis_counter++;
+			$comecou++;
+		}
 	}
 }
-print("${aneis_counter}");
+print("${aneis_counter}\n");
 
 my $certimestamp;
 my @listtemp = split /\//, $datacert;
