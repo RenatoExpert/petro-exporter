@@ -57,6 +57,9 @@ while(<>){
 	} elsif ($comecou) {
 		if ($_ =~ m/Faixa de/) {			
 			$aneis_counter++;
+			$missing = 0;
+		} elsif ($_ =~ m/[0-9]/) {
+			$missing = 0;
 		} elsif ($missing) {
 			last;
 		} else {
