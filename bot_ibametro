@@ -3,13 +3,16 @@
 use warnings;
 use strict;
 
-print("Step 1: Certificado de arqueacao \t (Pegando da aba 1)\n");
 #	Nome da certificadora
 my $empresa;
 my $run_empresa = 1;
 #	Data do certificado
 my $datacert; 
 my $run_datacert = 1;
+#	Altura util
+my $vendo_altura;
+my $altura_util;
+my $run_altura_util = 1;
 while(<>){
 	if ($run_empresa) {
 		if ($_ =~ m/Empresa:,/) {
@@ -27,27 +30,23 @@ while(<>){
 			$run_datacert = 0;
 		}
 	}
-}
-print ("${empresa} ${datacert} \n");
-
-print("Step 2: Altura util \t (Pegando da aba 1)\n");
-my $vendo_altura;
-my $altura_util;
-while(<>){
-	# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA PRIMEIRA ABA!!
-	if ($_ =~ m/Altura/) {	
-		$vendo_altura = 1;
-	} elsif ($vendo_altura) {
-		# Sabemos que a sessão acaba quando aparece qualquer linha NAO começada com um numero
-		if ($_ =~ m/^[0-9]/) {			
-			$altura_util = $_;
-		} else {
-			my @firstfield = split /,/, $altura_util;
-			$altura_util = $firstfield[0];
-			last;
+	if ($run_altura_util) {
+		# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA PRIMEIRA ABA!!
+		if ($_ =~ m/Altura/) {	
+			$vendo_altura = 1;
+		} elsif ($vendo_altura) {
+			# Sabemos que a sessão acaba quando aparece qualquer linha NAO começada com um numero
+			if ($_ =~ m/^[0-9]/) {			
+				$altura_util = $_;
+			} else {
+				my @firstfield = split /,/, $altura_util;
+				$altura_util = $firstfield[0];
+				last;
+			}
 		}
 	}
 }
+print ("${empresa} ${datacert} \n");
 
 print("Step 3: Contando os aneis \t (Pegando da aba 2)\n");
 my $segunda_aba		= 0;
