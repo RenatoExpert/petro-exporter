@@ -118,7 +118,7 @@ close(IW);
 
 #	Generating SQL syntax
 my $sqlfile	= './inserts.sql';
-open (SQLF, '>', $sqlfile);
+open (SQLF, '>>', $sqlfile);
 my $command = "INSERT INTO arqueacoes (certarqueacao, datacertificado, alturautil, numeroaneis${anelid_columns}) VALUES ('${empresa}${datacert}', '${certimestamp}', '${altura_util}', '${numeroaneis}'${anelid_values});\n";
 print SQLF $command;
 close(SQLF);
