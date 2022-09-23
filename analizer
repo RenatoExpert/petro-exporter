@@ -136,5 +136,5 @@ if ($datacertificado_value) {
 my $sqlfile	= './inserts.sql';
 open (SQLF, '>>', $sqlfile);
 my $command = "INSERT INTO arqueacoes (certarqueacao${datacertificado_column}, alturautil, numeroaneis${anelid_columns}) VALUES ('${empresa}${datacert}'${datacertificado_value}, '${altura_util}', '${numeroaneis}'${anelid_values});\n";
-print SQLF $command;
+print SQLF $command or die($!);
 close(SQLF);

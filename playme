@@ -9,7 +9,8 @@ echo "USE MEDLOGIXCRM" > inserts.sql
 
 #	Ibametro
 echo "Working on the following certificates"
-FILES="**xls"
+FILES="tqs/*xls"
+mkdir -p problematic
 echo $FILES
 for f in $FILES
 do
@@ -18,9 +19,15 @@ do
 	echo "Processing $f file into $tf..."
 	ssconvert $f $tf
 	#	Get info
-	./analizer $tf #1>> inserts.sql
+	./analizer $tf 
+	if [ $? -eq 0 ]
+	then
+		echo "Success"
+	else
+		mv $f problematic
+	fi
 	echo ---------------
 done
 
-rm **.txt
+rm tqs/*.txt
 rm idcount
