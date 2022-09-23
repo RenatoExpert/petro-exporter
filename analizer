@@ -32,6 +32,8 @@ my $numeroaneis	= 0;
 my $missing		= 0;
 my $comecou		= 0;
 my $run_contando_aneis	= 1;
+#	Altura inicial (de cada anel)
+my @alturas_iniciais;
 while(<>){
 	if ($run_empresa) {
 		if ($_ =~ m/Empresa:,/) {
@@ -92,15 +94,19 @@ while(<>){
 				$run_contando_aneis = 0;
 			} else {
 				$missing++;
+				$comecou = 0;
 			}
 		} elsif ($segunda_aba) {
 			if ($_ =~ m/Faixa de/) {			
 				$numeroaneis++;
 				$comecou++;
+				my $let_faixa = $_;
+				push @alturas_iniciais, $let_faixa;
 			}
 		}
 	}
 }
+print @alturas_iniciais;
 
 #	Defining anelid's
 my $anelcountdown = $numeroaneis;
