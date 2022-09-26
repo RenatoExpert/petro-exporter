@@ -2,7 +2,6 @@
 use warnings;
 use strict;
 
-#	Pegando o ultimo anelid
 my $anelidfile = "./idcount";
 sub get_lastid {
 	open (IC, '<', $anelidfile) or die $!;
@@ -13,166 +12,172 @@ sub get_lastid {
 	}
 	close (IC);
 }
-my $previousid = get_lastid();
-
-#	Nome da certificadora
-my $empresa;
-my $run_empresa		= 1;
-#	Data do certificado
-my $datacert; 
-my $run_datacert	= 1;
-my $datacertificado_value;
-#	Altura util
-my $vendo_altura;
-my $altura_util;
-my $run_altura_util	= 1;
-#	Contando aneis
-my $segunda_aba		= 0;
-my $numeroaneis	= 0;
-my $missing		= 0;
-my $comecou		= 0;
-my $run_contando_aneis	= 1;
-#	Altura inicial (de cada anel)
-my @alturas_iniciais;
-my @alturas_finais;
-while(<>){
-	if ($run_empresa) {
-		if ($_ =~ m/Empresa:,/) {
-			$empresa = $_;
-			$empresa =~ s/Empresa:,//;
-			$empresa =~ s/\n//;
-			$run_empresa = 0;
-		}
-	}
-	if ($run_datacert) {
-		if ($_ =~ m/Certificado:,/) {
-			$datacert = $_ ;
-			$datacert =~ s/Certificado:,//;
-			$datacert =~ s/\n//;
-			$run_datacert = 0;
-			#	Tratando o timestamp de ano
-			if ($datacert =~ m/\//) {
-				my @listtemp = split /\//, $datacert;
-				$datacertificado_value = $listtemp[1];
-				my $vintao;
-				if ($datacertificado_value !~ m/[0-9]{4}/) {
-					$vintao = "20";
-				} else {
-					$vintao = "";
-				}
-				$datacertificado_value = ", '${vintao}${datacertificado_value}'";
-			} else {
-				$datacertificado_value = "";
-			}
-		}
-	}
-	if ($run_altura_util) {
-		# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA PRIMEIRA ABA!!
-		if ($_ =~ m/Altura/) {	
-			$vendo_altura = 1;
-		} elsif ($vendo_altura) {
-			# Sabemos que a sessão acaba quando aparece qualquer linha NAO começada com um numero
-			if ($_ =~ m/^[0-9]/) {			
-				$altura_util = $_;
-			} else {
-				my @firstfield = split /,/, $altura_util;
-				$altura_util = $firstfield[0];
-				$run_altura_util = 0;
-			}
-		}
-	}
-	if ($run_contando_aneis) {
-		# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA SEGUNDA ABA!!
-		if ($_ =~ m/Faixas de Arqueação/) {	
-			$segunda_aba = 1;
-		} elsif ($comecou) {
-			if ($_ =~ m/Faixa de/) {			
-				$numeroaneis++;
-				$missing = 0;
-			} elsif ($_ =~ m/^[0-9]/) {
-				$missing = 0;
-			} elsif ($missing) {
-				$run_contando_aneis = 0;
-			} else {
-				$missing++;
-				$comecou = 0;
-			}
-		} elsif ($segunda_aba) {
-			if ($_ =~ m/Faixa de/) {			
-				$numeroaneis++;
-				$comecou++;
-				my $let_faixa = $_;
-				$let_faixa =~ s/Faixa de //;
-				$let_faixa =~ s/"//g;
-				$let_faixa =~ s/\n//g;
-				$let_faixa =~ s/,//g;
-				my @let_range = split / /, $let_faixa;
-				my $let_inicial = $let_range[0];
-				my $let_final = $let_range[2];
-				push @alturas_iniciais, $let_inicial;
-				push @alturas_finais, $let_final
-			}
-		}
-	}
-}
-
-#	Defining anelid's
-my $anelcountdown = $numeroaneis;
-my $executionturn = 1;
-my $anelid_columns;
-my $anelid_values;
-while ($anelcountdown) {
-	if ($anelcountdown) {
-		my $let_counter = 1+$numeroaneis-$anelcountdown;
-		$anelid_columns .= ", anelid${let_counter}";
-		$previousid++;
-		$anelid_values .= ", '${previousid}'";
-	} else {
-		last;
-	}
-	$anelcountdown--;
-}
-
-#	Defining altura minima
-my $altura_inicial_columns;
-my $altura_inicial_values;
-my $let_alturai_counter = 1;
-while (@alturas_iniciais) {
-	$altura_inicial_columns .= ", alturainicial${let_alturai_counter}";
-	my $let_valor = shift @alturas_iniciais;
-	$altura_inicial_values .= ", '${let_valor}'";
-	$let_alturai_counter++;
-}
-#	Defining altura maxima
-my $altura_final_columns;
-my $altura_final_values;
-my $let_alturaf_counter = 1;
-while (@alturas_finais) {
-	$altura_final_columns .= ", alturafinal${let_alturaf_counter}";
-	my $let_valor = shift @alturas_finais;
-	$altura_final_values .= ", '${let_valor}'";
-	$let_alturaf_counter++;
-}
-
-#	Saving last anelid
 sub save_last_anelid {
 	open (IW, '>', $anelidfile);
 	print IW $_[0];
 	close(IW);
 }
-save_last_anelid($previousid);
 
-#	Data certificado
-my $datacertificado_column;
-if ($datacertificado_value) {
-	$datacertificado_column = ", datacertificado";
-} else {
-	$datacertificado_column = "";
+sub preparando_linha {
+	#	Pegando o ultimo anelid
+	my $previousid = get_lastid();
+	#	Nome da certificadora
+	my $empresa;
+	my $run_empresa		= 1;
+	#	Data do certificado
+	my $datacert; 
+	my $run_datacert	= 1;
+	my $datacertificado_value;
+	#	Altura util
+	my $vendo_altura;
+	my $altura_util;
+	my $run_altura_util	= 1;
+	#	Contando aneis
+	my $segunda_aba		= 0;
+	my $numeroaneis	= 0;
+	my $missing		= 0;
+	my $comecou		= 0;
+	my $run_contando_aneis	= 1;
+	#	Altura inicial (de cada anel)
+	my @alturas_iniciais;
+	my @alturas_finais;
+	while(<>){
+		if ($run_empresa) {
+			if ($_ =~ m/Empresa:,/) {
+				$empresa = $_;
+				$empresa =~ s/Empresa:,//;
+				$empresa =~ s/\n//;
+				$run_empresa = 0;
+			}
+		}
+		if ($run_datacert) {
+			if ($_ =~ m/Certificado:,/) {
+				$datacert = $_ ;
+				$datacert =~ s/Certificado:,//;
+				$datacert =~ s/\n//;
+				$run_datacert = 0;
+				#	Tratando o timestamp de ano
+				if ($datacert =~ m/\//) {
+					my @listtemp = split /\//, $datacert;
+					$datacertificado_value = $listtemp[1];
+					my $vintao;
+					if ($datacertificado_value !~ m/[0-9]{4}/) {
+						$vintao = "20";
+					} else {
+						$vintao = "";
+					}
+					$datacertificado_value = ", '${vintao}${datacertificado_value}'";
+				} else {
+					$datacertificado_value = "";
+				}
+			}
+		}
+		if ($run_altura_util) {
+			# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA PRIMEIRA ABA!!
+			if ($_ =~ m/Altura/) {	
+				$vendo_altura = 1;
+			} elsif ($vendo_altura) {
+				# Sabemos que a sessão acaba quando aparece qualquer linha NAO começada com um numero
+				if ($_ =~ m/^[0-9]/) {			
+					$altura_util = $_;
+				} else {
+					my @firstfield = split /,/, $altura_util;
+					$altura_util = $firstfield[0];
+					$run_altura_util = 0;
+				}
+			}
+		}
+		if ($run_contando_aneis) {
+			# Ele começa a olhar as alturas depois de encontrar a palavra Altura NA SEGUNDA ABA!!
+			if ($_ =~ m/Faixas de Arqueação/) {	
+				$segunda_aba = 1;
+			} elsif ($comecou) {
+				if ($_ =~ m/Faixa de/) {			
+					$numeroaneis++;
+					$missing = 0;
+				} elsif ($_ =~ m/^[0-9]/) {
+					$missing = 0;
+				} elsif ($missing) {
+					$run_contando_aneis = 0;
+				} else {
+					$missing++;
+					$comecou = 0;
+				}
+			} elsif ($segunda_aba) {
+				if ($_ =~ m/Faixa de/) {			
+					$numeroaneis++;
+					$comecou++;
+					my $let_faixa = $_;
+					$let_faixa =~ s/Faixa de //;
+					$let_faixa =~ s/"//g;
+					$let_faixa =~ s/\n//g;
+					$let_faixa =~ s/,//g;
+					my @let_range = split / /, $let_faixa;
+					my $let_inicial = $let_range[0];
+					my $let_final = $let_range[2];
+					push @alturas_iniciais, $let_inicial;
+					push @alturas_finais, $let_final
+				}
+			}
+		}
+	}
+
+	#	Defining anelid's
+	my $anelcountdown = $numeroaneis;
+	my $executionturn = 1;
+	my $anelid_columns;
+	my $anelid_values;
+	while ($anelcountdown) {
+		if ($anelcountdown) {
+			my $let_counter = 1+$numeroaneis-$anelcountdown;
+			$anelid_columns .= ", anelid${let_counter}";
+			$previousid++;
+			$anelid_values .= ", '${previousid}'";
+		} else {
+			last;
+		}
+		$anelcountdown--;
+	}
+
+	#	Defining altura minima
+	my $altura_inicial_columns;
+	my $altura_inicial_values;
+	my $let_alturai_counter = 1;
+	while (@alturas_iniciais) {
+		$altura_inicial_columns .= ", alturainicial${let_alturai_counter}";
+		my $let_valor = shift @alturas_iniciais;
+		$altura_inicial_values .= ", '${let_valor}'";
+		$let_alturai_counter++;
+	}
+	#	Defining altura maxima
+	my $altura_final_columns;
+	my $altura_final_values;
+	my $let_alturaf_counter = 1;
+	while (@alturas_finais) {
+		$altura_final_columns .= ", alturafinal${let_alturaf_counter}";
+		my $let_valor = shift @alturas_finais;
+		$altura_final_values .= ", '${let_valor}'";
+		$let_alturaf_counter++;
+	}
+
+	#	Saving last anelid
+	save_last_anelid($previousid);
+
+	#	Data certificado
+	my $datacertificado_column;
+	if ($datacertificado_value) {
+		$datacertificado_column = ", datacertificado";
+	} else {
+		$datacertificado_column = "";
+	}
+	#	Generating SQL syntax
+	my $command = "INSERT INTO arqueacoes (certarqueacao${datacertificado_column}, alturautil${altura_inicial_columns}${altura_final_columns}, numeroaneis${anelid_columns}) VALUES ('${empresa}${datacert}'${datacertificado_value}, '${altura_util}'${altura_inicial_values}${altura_final_values}, '${numeroaneis}'${anelid_values});\n";
+	return $command;
 }
-
-#	Generating SQL syntax
-my $sqlfile	= './inserts.sql';
-open (SQLF, '>>', $sqlfile);
-my $command = "INSERT INTO arqueacoes (certarqueacao${datacertificado_column}, alturautil${altura_inicial_columns}${altura_final_columns}, numeroaneis${anelid_columns}) VALUES ('${empresa}${datacert}'${datacertificado_value}, '${altura_util}'${altura_inicial_values}${altura_final_values}, '${numeroaneis}'${anelid_values});\n";
-print SQLF $command or die($!);
-close(SQLF);
+sub write_sql {
+	my $sqlfile	= './inserts.sql';
+	open (SQLF, '>>', $sqlfile);
+	print SQLF $_[0] or die($!);
+	close(SQLF);
+}
+write_sql(preparando_linha());
