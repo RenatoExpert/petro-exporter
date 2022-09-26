@@ -17,7 +17,18 @@ sub save_last_anelid {
 	print IW $_[0];
 	close(IW);
 }
-
+sub write_sql {
+	my $sqlfile	= './inserts.sql';
+	open (SQLF, '>>', $sqlfile);
+	print SQLF $_[0] or die($!);
+	close(SQLF);
+}
+sub get_tq_name {
+	my $name = $_[0];
+	$name = (split /\//, $name)[1];
+	$name = (split /\_/, $name)[0];
+	return $name;
+}
 sub preparando_linha {
 	#	Pegando o ultimo anelid
 	my $previousid = get_lastid();
@@ -42,7 +53,6 @@ sub preparando_linha {
 	my @alturas_iniciais;
 	my @alturas_finais;
 	while(<>){
-		print ($ARGV . "\n");
 		if ($run_empresa) {
 			if ($_ =~ m/Empresa:,/) {
 				$empresa = $_;
@@ -122,6 +132,7 @@ sub preparando_linha {
 			}
 		}
 	}
+	print(get_tq_name($ARGV));
 
 	#	Defining anelid's
 	my $anelcountdown = $numeroaneis;
@@ -174,11 +185,5 @@ sub preparando_linha {
 	#	Generating SQL syntax
 	my $command = "INSERT INTO arqueacoes (certarqueacao${datacertificado_column}, alturautil${altura_inicial_columns}${altura_final_columns}, numeroaneis${anelid_columns}) VALUES ('${empresa}${datacert}'${datacertificado_value}, '${altura_util}'${altura_inicial_values}${altura_final_values}, '${numeroaneis}'${anelid_values});\n";
 	return $command;
-}
-sub write_sql {
-	my $sqlfile	= './inserts.sql';
-	open (SQLF, '>>', $sqlfile);
-	print SQLF $_[0] or die($!);
-	close(SQLF);
 }
 write_sql(preparando_linha());
