@@ -4,16 +4,16 @@ use strict;
 
 #	Pegando o ultimo anelid
 my $anelidfile = "./idcount";
-my $previousid = 1;
-open (IC, '<', $anelidfile) or die $!;
-while (<IC>) {
-	if ($_ =~ m/[0-9]/) {
-		if($_ > $previousid) {
-			$previousid = $_;
+sub get_lastid {
+	open (IC, '<', $anelidfile) or die $!;
+	while (<IC>) {
+		if ($_ =~ m/[0-9]/) {
+			return $_;
 		}
 	}
+	close (IC);
 }
-close (IC);
+my $previousid = get_lastid();
 
 #	Nome da certificadora
 my $empresa;
