@@ -155,9 +155,12 @@ while (@alturas_finais) {
 }
 
 #	Saving last anelid
-open (IW, '>', $anelidfile);
-print IW "$previousid";
-close(IW);
+sub save_last_anelid {
+	open (IW, '>', $anelidfile);
+	print IW $_[0];
+	close(IW);
+}
+save_last_anelid($previousid);
 
 #	Data certificado
 my $datacertificado_column;
