@@ -29,6 +29,17 @@ sub get_tq_name {
 	$name = (split /\_/, $name)[0];
 	return $name;
 }
+sub get_line_from_tabelado {
+	my $tabelado_file = 'tabelado.txt';
+	my $tqname = $_[0];
+	open(TB, '<', $tabelado_file);
+	while (<TB>) {
+		if ($_ =~ m<$tqname>) {
+			return $_;
+		}
+	}
+	close(TB);
+}
 sub preparando_linha {
 	#	Pegando o ultimo anelid
 	my $previousid = get_lastid();
@@ -132,7 +143,8 @@ sub preparando_linha {
 			}
 		}
 	}
-	print(get_tq_name($ARGV));
+	my $tq_name = get_tq_name($ARGV);
+	print get_line_from_tabelado($tq_name);
 
 	#	Defining anelid's
 	my $anelcountdown = $numeroaneis;
