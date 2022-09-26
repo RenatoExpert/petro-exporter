@@ -42,6 +42,7 @@ sub preparando_linha {
 	my @alturas_iniciais;
 	my @alturas_finais;
 	while(<>){
+		print ($ARGV . "\n");
 		if ($run_empresa) {
 			if ($_ =~ m/Empresa:,/) {
 				$empresa = $_;
